@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My game</title>
+    <link rel="stylesheet" href="game.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            background-color: #081b31;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+        }
+
+        .choices {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .choice {
+            padding: 32px;
+        }
+
+        .choice p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        .choice:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .img {
+            height: 161px;
+            width: 216px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .img1 {
+            background-color: rgb(59, 35, 35);
+        }
+
+        .img2 {
+            background-color: rgba(255, 187, 0, 0.808);
+        }
+
+        .img3 {
+            background-color: rgba(17, 131, 41, 0.836);
+        }
+
+        .score-bord {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        .score {
+            padding: 13px
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+        }
+
+        .msg-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        #msg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.3rem;
+            background-color: black;
+            color: white;
+            border-radius: 19px;
+            padding: 4px 16px;
+            margin: 30px 0px
+        }
+
+        .para {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+        }
+
+        h3 {
+            color: red;
+        }
+
+        @media only screen and (max-width : 800px) {
+            .choice {
+                padding: 10px;
+            }
+
+            .img {
+                height: 100px;
+                width: 110px;
+            }
+        }
+
+        @media only screen and (max-width : 385px) {
+            .img {
+                height: 77px;
+                width: 73px;
+            }
+
+            #msg {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h2>My Game</h2>
+    <div class="choices">
+        <div class="choice" id="rock">
+            <div class="img img1"></div>
+            <p>rock</p>
+        </div>
+        <div class="choice" id="paper">
+            <div class="img img2"></div>
+            <p>paper</p>
+        </div>
+        <div class="choice" id="scissors">
+            <div class="img img3"></div>
+            <p>scissors</p>
+        </div>
+    </div>
+    <div class="score-bord">
+        <div class="score">
+            <p id="user" class="center">0</p>
+            <p>User</p>
+        </div>
+        <div class="score">
+            <p id="comp" class="center">0</p>
+            <p>Computer</p>
+        </div>
+    </div>
+    <div class="msg-container">
+        <p id="msg">Play your move</p>
+    </div>
+    <div class="para">
+        <h3>Game Instruction.</h3>
+        <p>Rock & Paper = Paper Win</p>
+        <p>Rock & Scissors = Rock Win</p>
+        <p>Paper & Scissors = Scissors Win</p>
+    </div>
+    <script>
+
+        let userScore = 0;
+        let compScore = 0;
+
+        const choices = document.querySelectorAll(".choice");
+        const para = document.querySelector("#msg");
+        const uscore = document.querySelector("#user")
+        const cscore = document.querySelector("#comp")
+
+        const gencompchoice = () => {
+            const options = ["rock", "paper", "scissors"];
+            const randind = Math.floor(Math.random() * 3); // to create random number between 0 - 2
+            return options[randind];
+        }
+        const drawgame = () => {
+            console.log("Game was draw.")
+            para.innerText = "Game is Draw."
+            para.style.backgroundColor = "black";
+        }
+
+        const winershow = (userwin) => {
+            if (userwin) {
+                userScore++;
+                uscore.innerText = userScore;
+                console.log("You win")
+                para.innerText = `You win.`
+                para.style.backgroundColor = "green";
+            } else {
+                compScore++;
+                cscore.innerText = compScore;
+                console.log("You lose.")
+                para.innerText = `You lose. `
+                para.style.backgroundColor = "red";
+            }
+        }
+
+        const playgame = (userchoice) => {
+            console.log(userchoice)
+            const compchoice = gencompchoice();
+            console.log(compchoice)
+            if (userchoice === compchoice) {
+                // draw game
+                drawgame();
+            } else {
+                let userwin = true;
+                if (userchoice === "rock") {
+                    // option is paper & scissors
+                    userwin = compchoice === "paper" ? false : true;
+                } else if (userchoice === "paper") {
+                    // option is rock & scissors
+                    userwin = compchoice === "scissors" ? false : true;
+                } else {
+                    // option is rock & paper
+                    userwin = compchoice === "rock" ? false : true;
+                }
+                winershow(userwin);
+            }
+        }
+
+
+        choices.forEach((choice) => {
+            choice.addEventListener("click", () => {
+                const userchoice = choice.getAttribute("id")
+                playgame(userchoice);
+
+            })
+        })
+    </script>
+</body>
+
+</html>
